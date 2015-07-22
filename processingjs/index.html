@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hello Web - Processing.js Test</title>
+  <script src="processing.js"></script>
+  <script>
+var processingInstance;
+ 
+function setAngles(){
+  if (!processingInstance) {
+    processingInstance = Processing.getInstanceById('sketch');
+  }
+  processingInstance.setAngles(document.getElementById("x").value, document.getElementById("y").value, document.getElementById("z").value);
+}
+
+setInterval(function() {
+  setAngles();
+},100);
+
+</script>
+</head>
+<body>
+   <h1>Processing.js Test</h1>
+   <p>This is my first Processing.js web-based sketch:</p>
+  <canvas id='sketch' data-processing-sources="herro.pde"></canvas>
+<p>x: <input id="x" type="range" min="0" max="360" value="0"/></p>
+<p>y: <input id="y" type="range" min="0" max="360" value="0"/></p>
+<p>z: <input id="z" type="range" min="0" max="360" value="0"/></p>
+</body>
+</html>
