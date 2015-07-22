@@ -6,6 +6,14 @@ app.get('/', function(req, res){
   res.sendFile(__dirname+'/index.html');
 });
 
+app.get('/processing.js', function(req, res){
+  res.sendFile(__dirname+'/processing.js');
+});
+
+app.get('/rocket.pde', function(req, res){
+  res.sendFile(__dirname+'/rocket.pde');
+});
+
 io.on('connection', function(socket){
   console.log('a user connected');
   socket.emit('data', 123);

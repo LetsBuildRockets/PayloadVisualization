@@ -1,0 +1,13 @@
+{
+  "name": "PayloadVisualization",
+  "version": "0.0.1",
+  "description": "Payload Data Visualization for amateur liquid fueled rocket.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/letsbuildrockets/PayloadVisualization"
+  },
+  "dependencies": {
+    "express": "^4.13.1",
+    "socket.io": "^1.3.6"
+  }
+}

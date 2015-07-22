@@ -1,4 +1,5 @@
 <html>
+<head>
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io();
@@ -6,4 +7,28 @@
     console.log(data)
   });
 </script>
+<script src="processing.js"></script>
+<script>
+  var processingInstance;
+
+  function setAngles(){
+    if (!processingInstance) {
+      processingInstance = Processing.getInstanceById('sketch');
+    }
+    processingInstance.setAngles(document.getElementById("x").value, document.getElementById("y").value, document.getElementById("z").value);
+  }
+
+  setInterval(function() {
+    setAngles();
+  },100);
+</script>
+</head>
+<body>
+   <h1>Processing.js Test</h1>
+   <p>This is my first Processing.js web-based sketch:</p>
+  <canvas id='sketch' data-processing-sources="rocket.pde"></canvas>
+<p>x: <input id="x" type="range" min="0" max="360" value="0"/></p>
+<p>y: <input id="y" type="range" min="0" max="360" value="0"/></p>
+<p>z: <input id="z" type="range" min="0" max="360" value="0"/></p>
+</body>
 </html>
