@@ -1,2 +1,2 @@
 # PayloadVisualization
-Data visualization for rocket payload using node and webgl
+Data visualization for rocket payload using node and processingjs
