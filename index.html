@@ -1,34 +1,60 @@
 <html>
 <head>
 <script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io();
-  socket.on('data', function(data) {
-    console.log(data)
-  });
-</script>
 <script src="processing.js"></script>
-<script>
-  var processingInstance;
-
-  function setAngles(){
-    if (!processingInstance) {
-      processingInstance = Processing.getInstanceById('sketch');
-    }
-    processingInstance.setAngles(document.getElementById("x").value, document.getElementById("y").value, document.getElementById("z").value);
+<style>
+  .data {
+    display: inline;
   }
-
-  setInterval(function() {
-    setAngles();
-  },100);
-</script>
+  #sketch {
+    float: left;
+    margin-right: 20px;
+  }
+</style>
 </head>
+
 <body>
-   <h1>Processing.js Test</h1>
-   <p>This is my first Processing.js web-based sketch:</p>
+  <h1>Rocket IMU Visualization</h1>
   <canvas id='sketch' data-processing-sources="rocket.pde"></canvas>
-<p>x: <input id="x" type="range" min="0" max="360" value="0"/></p>
-<p>y: <input id="y" type="range" min="0" max="360" value="0"/></p>
-<p>z: <input id="z" type="range" min="0" max="360" value="0"/></p>
+  <div class="data">
+    <table>
+    <tr><td>Altitude:</td><td><input type="text" id="alt" disabled></td></tr>
+    <tr><td>Temperature:</td><td><input type="text" id="temp" disabled></td></tr>
+    <tr><td>Pitch:</td><td><input type="text" id="pitch" disabled></td></tr>
+    <tr><td>Roll:</td><td><input type="text" id="roll" disabled></td></tr>
+    <tr><td>Heading:</td><td><input type="text" id="heading" disabled></td></tr>
+    </table>
+  </div>
+  
+  
+  
+  
+  
+  <script>
+    var processingInstance;
+
+    function setAngles(x, y, z){
+      if (!processingInstance) {
+        processingInstance = Processing.getInstanceById('sketch');
+      }
+      processingInstance.setAngles(x, y, z);
+    }
+
+    /*setInterval(function() {
+      setAngles(document.getElementById("x").value, document.getElementById("y").value, document.getElementById("z").value);
+    },100);*/
+  </script>
+  <script>
+    var socket = io();
+    socket.on('data', function(data) {
+      console.log(data)
+      setAngles(data['pitch']+90,-data['roll'],data['heading']);
+      document.getElementById("alt").value = data['alt'];
+      document.getElementById("temp").value = data['temp'];
+      document.getElementById("pitch").value = data['pitch'];
+      document.getElementById("roll").value = data['roll'];
+      document.getElementById("heading").value = data['heading'];
+    });
+</script>
 </body>
 </html>
