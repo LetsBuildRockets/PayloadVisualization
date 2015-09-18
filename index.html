@@ -23,6 +23,9 @@
     <tr><td>Pitch:</td><td><input type="text" id="pitch" disabled></td></tr>
     <tr><td>Roll:</td><td><input type="text" id="roll" disabled></td></tr>
     <tr><td>Heading:</td><td><input type="text" id="heading" disabled></td></tr>
+    <tr><td>X Acceleration:</td><td><input type="text" id="xLin" disabled></td></tr>
+    <tr><td>Y Acceleration:</td><td><input type="text" id="yLin" disabled></td></tr>
+    <tr><td>Z Acceleration:</td><td><input type="text" id="zLin" disabled></td></tr>
     </table>
   </div>
   
@@ -54,6 +57,9 @@
       document.getElementById("pitch").value = data['pitch'];
       document.getElementById("roll").value = data['roll'];
       document.getElementById("heading").value = data['heading'];
+      document.getElementById("xLin").value = data['xLin'];
+      document.getElementById("yLin").value = data['yLin'];
+      document.getElementById("zLin").value = data['zLin'];
     });
 </script>
 </body>
