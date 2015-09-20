@@ -8,7 +8,7 @@ void setup() {
 
 void draw()
 {
-    background(106,163,156);
+    background(206, 222, 218);
     lights();
 
     fill(color[0], color[1], color[2]);
