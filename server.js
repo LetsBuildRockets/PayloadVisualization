@@ -27,7 +27,7 @@ if(process.argv[2]) {
   });
 }
 
-app.get('/', function(req, res){
+app.get('/ShareTechMono-regular.ttf', function(req, res){
   res.sendFile(__dirname + '/ShareTechMono-regular.ttf');
 });
 
