@@ -28,6 +28,10 @@ if(process.argv[2]) {
 }
 
 app.get('/', function(req, res){
+  res.sendFile(__dirname + '/ShareTechMono-regular.ttf');
+});
+
+app.get('/', function(req, res){
   res.sendFile(__dirname+'/index.html');
 });
 
