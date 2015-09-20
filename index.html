@@ -2,18 +2,50 @@
 <head>
 <script src="/socket.io/socket.io.js"></script>
 <script src="processing.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Share+Tech+Mono' rel='stylesheet' type='text/css'>
 <style>
-  .data {
-    display: inline;
-  }
-  #sketch {
-    float: left;
-    margin-right: 20px;
-  }
+
+body {
+  background-color: #cededa; 
+  color: #57464e;
+  font-size: 25px;
+
+  padding: 5vw;
+}
+h1 {
+  font-family: 'Share Tech Mono';
+}
+.data input { 
+  background-color: #798499; 
+  border: 0; 
+  padding: 5px;
+
+  color: #e1d0ab; 
+  font-size: 24px;
+  font-family: 'Share Tech Mono';
+}  
+.data table {
+  display: inline;
+  font-size: 24px;
+  margin: 5vw;
+}
+
+#container {
+  width: 100%;
+}
+
+#sketch {
+  float:left;
+  border: dashed 5px #ebebeb;
+  width: 500px;
+  height: 500px;
+}
+
 </style>
 </head>
 
 <body>
+<div id='container'>
   <h1>Rocket IMU Visualization</h1>
   <canvas id='sketch' data-processing-sources="rocket.pde"></canvas>
   <div class="data">
@@ -28,6 +60,7 @@
     <tr><td>Z Acceleration:</td><td><input type="text" id="zLin" disabled></td></tr>
     </table>
   </div>
+</div>
   
   
   
