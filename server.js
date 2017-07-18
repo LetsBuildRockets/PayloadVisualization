@@ -1,9 +1,10 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var SerialPort = require("serialport").SerialPort
 
 if(process.argv[2]) {
+  var SerialPort = require("serialport").SerialPort
+
   var serialPort = new SerialPort(process.argv[2], {
     baudrate: 115200
   });
@@ -25,6 +26,27 @@ if(process.argv[2]) {
       }
     });
   });
+} else {
+  var WebSocketServer = require('ws').Server;
+  var server = require('http').createServer();
+  var wss = new WebSocketServer({server: server, path: '/foo'});
+  wss.on('connection', function(ws) {
+      console.log('/foo connected');
+      ws.on('message', function(data, flags) {
+          if (flags.binary) { return; }
+          console.log('>>> ' + data);
+          var obj = {'pitch':0, 'alt':0, 'temp':0, 'roll':parseFloat(data), 'heading':0, 'xLin':0, 'yLin':0, 'zLin':0};
+          io.sockets.emit('data', obj);
+      });
+      ws.on('close', function() {
+        console.log('Connection closed!');
+      });
+      ws.on('error', function(e) {
+      });
+  });
+  server.listen(8126);
+  console.log('Listening on port 8126...');
+
 }
 
 app.get('/ShareTechMono-regular.ttf', function(req, res){
