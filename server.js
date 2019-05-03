@@ -2,10 +2,61 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-if(process.argv[2]) {
+/* Main server startup stuff */
+if(process.argv[2] == "serialport" ) {
+
+  if(process.argv[3]){
+    serialPortMode(process.argv[3]);
+  } else {
+    console.log('please include a serial port');
+    process.exit();
+  }
+} else if(process.argv[2] == "websocket" ) {
+  webSocketMode();
+} else if(process.argv[2] == "playback" ) {
+  console.log("yayy");
+} else {
+  console.log("Please specify a mode: serialport <port> | websocket | playback <file>");
+  process.exit();
+}
+
+/* Serve Files */
+app.get('/ShareTechMono-regular.ttf', function(req, res){
+  res.sendFile(__dirname + '/ShareTechMono-regular.ttf');
+});
+
+app.get('/', function(req, res){
+  res.sendFile(__dirname+'/index.html');
+});
+
+app.get('/processing.js', function(req, res){
+  res.sendFile(__dirname+'/processing.js');
+});
+
+app.get('/rocket.pde', function(req, res){
+  res.sendFile(__dirname+'/rocket.pde');
+});
+
+/* server status */
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.emit('data', 123);
+});
+
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
+
+
+/* This Visualization service can be set up in different modes! */
+
+function serialPortMode(port){
+  // This mode was originally used at Maker Faire 2015, where the payload was connected directly over USB serial.
+  // TODO: i couldn't successfully install SerialPort so idk if this even works
+
   var SerialPort = require("serialport").SerialPort
 
-  var serialPort = new SerialPort(process.argv[2], {
+  var serialPort = new SerialPort(port, {
     baudrate: 115200
   });
 
@@ -26,7 +77,11 @@ if(process.argv[2]) {
       }
     });
   });
-} else {
+}
+
+function webSocketMode(){
+  // This mode was used with the HorizonTracker payload project, @poojpooj Summer 2017
+  // TODO: I also didn't test this
   var WebSocketServer = require('ws').Server;
   var server = require('http').createServer();
   var wss = new WebSocketServer({server: server, path: '/foo'});
@@ -46,30 +101,4 @@ if(process.argv[2]) {
   });
   server.listen(8126);
   console.log('Listening on port 8126...');
-
 }
-
-app.get('/ShareTechMono-regular.ttf', function(req, res){
-  res.sendFile(__dirname + '/ShareTechMono-regular.ttf');
-});
-
-app.get('/', function(req, res){
-  res.sendFile(__dirname+'/index.html');
-});
-
-app.get('/processing.js', function(req, res){
-  res.sendFile(__dirname+'/processing.js');
-});
-
-app.get('/rocket.pde', function(req, res){
-  res.sendFile(__dirname+'/rocket.pde');
-});
-
-io.on('connection', function(socket){
-  console.log('a user connected');
-  socket.emit('data', 123);
-});
-
-http.listen(3000, function(){
-  console.log('listening on *:3000');
-});
