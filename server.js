@@ -14,7 +14,12 @@ if(process.argv[2] == "serialport" ) {
 } else if(process.argv[2] == "websocket" ) {
   webSocketMode();
 } else if(process.argv[2] == "playback" ) {
-  console.log("yayy");
+  if(process.argv[3]){
+    playbackMode(process.argv[3]);
+  } else {
+    console.log('please include a file');
+    process.exit();
+  }
 } else {
   console.log("Please specify a mode: serialport <port> | websocket | playback <file>");
   process.exit();
@@ -58,6 +63,32 @@ http.listen(3000, function(){
 
 /* This Visualization service can be set up in different modes! */
 
+function playbackMode(file){
+  // playback mode!!!
+  var fs = require('fs');
+
+  // default state
+  var rocket_state = {'pitch':0, 'alt':0, 'temp':0, 'roll':0, 'heading':0, 'xLin':0, 'yLin':0, 'zLin':0};
+  var playback_file;
+  var counter = 0;
+  var max_count = 0;
+  fs.readFile(file, 'ascii', function(err, contents) {
+    console.log("file imported");
+    playback_file = contents.split("\n");
+    max_count = playback_file.length;
+  });
+
+  setInterval(function(){
+    if(playback_file){
+      console.log(playback_file[counter]);
+      counter = (counter + 1) % max_count;
+    }
+    io.sockets.emit('data', rocket_state);
+  }, 1000);
+  
+  console.log('after calling readFile');
+}
+
 function serialPortMode(port){
   // This mode was originally used at Maker Faire 2015, where the payload was connected directly over USB serial.
   // TODO: i couldn't successfully install SerialPort so idk if this even works
@@ -94,18 +125,18 @@ function webSocketMode(){
   var server = require('http').createServer();
   var wss = new WebSocketServer({server: server, path: '/foo'});
   wss.on('connection', function(ws) {
-      console.log('/foo connected');
-      ws.on('message', function(data, flags) {
-          if (flags.binary) { return; }
-          console.log('>>> ' + data);
-          var obj = {'pitch':0, 'alt':0, 'temp':0, 'roll':parseFloat(data), 'heading':0, 'xLin':0, 'yLin':0, 'zLin':0};
-          io.sockets.emit('data', obj);
-      });
-      ws.on('close', function() {
-        console.log('Connection closed!');
-      });
-      ws.on('error', function(e) {
-      });
+    console.log('/foo connected');
+    ws.on('message', function(data, flags) {
+      if (flags.binary) { return; }
+      console.log('>>> ' + data);
+      var obj = {'pitch':0, 'alt':0, 'temp':0, 'roll':parseFloat(data), 'heading':0, 'xLin':0, 'yLin':0, 'zLin':0};
+      io.sockets.emit('data', obj);
+    });
+    ws.on('close', function() {
+      console.log('Connection closed!');
+    });
+    ws.on('error', function(e) {
+    });
   });
   server.listen(8126);
   console.log('Listening on port 8126...');
