@@ -8,7 +8,7 @@ void setup() {
 
 void draw()
 {
-    background(206, 222, 218);
+    background(243,243,243);
     lights();
 
     fill(color[0], color[1], color[2]);
@@ -61,7 +61,7 @@ void drawCylinder( int sides, float r1, float r2, float h)
         vertex( x2, y2, halfHeight);
     }
     endShape(CLOSE);
-} 
+}
 
 void drawRocket(float height)
 {
