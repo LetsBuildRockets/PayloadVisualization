@@ -68,10 +68,12 @@ function playbackMode(file){
   var fs = require('fs');
 
   // default state
-  var rocket_state = {'pitch':0, 'alt':0, 'temp':0, 'roll':0, 'heading':0, 'xLin':0, 'yLin':0, 'zLin':0};
+  var rocket_state = {};// = {'pitch':0, 'alt':0, 'temp':0, 'roll':0, 'heading':0, 'xLin':0, 'yLin':0, 'zLin':0};
   var playback_file;
   var counter = 0;
   var max_count = 0;
+  var msg_type = ['IGNORE', 'ERROR', 'WARNING', 'INFO', 'GPS', 'IMU', 'POWER'];
+
   fs.readFile(file, 'ascii', function(err, contents) {
     console.log("file imported");
     playback_file = contents.split("\n");
@@ -80,12 +82,40 @@ function playbackMode(file){
 
   setInterval(function(){
     if(playback_file){
-      console.log(playback_file[counter]);
+      var line = playback_file[counter];
+      //console.log(line);
+      var line_code = line.charCodeAt(0).toString(16);
+      //console.log(line_code + " " + msg_type[line_code]);
+      //console.log(line_code);
+      switch (line_code) {
+        case '3':
+          //console.log("INFO");
+          //console.log(line);
+          break;
+        case '4':
+          console.log("GPS");
+          console.log(line);
+          break;
+        case '5':
+
+          console.log("IMU");
+          line = line.substring(1).split(" ");
+          console.log(line);
+          rocket_state.roll = line[2];
+          rocket_state.pitch = line[1];
+          rocket_state.heading = line[0];
+
+          console.log("################### " + counter);
+          // roll pitch heading
+          break;
+        default:
+
+      }
       counter = (counter + 1) % max_count;
     }
     io.sockets.emit('data', rocket_state);
-  }, 1000);
-  
+  }, 100);
+
   console.log('after calling readFile');
 }
 
