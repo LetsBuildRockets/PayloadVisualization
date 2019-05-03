@@ -37,6 +37,14 @@ app.get('/rocket.pde', function(req, res){
   res.sendFile(__dirname+'/rocket.pde');
 });
 
+app.get('/style.css', function(req, res){
+  res.sendFile(__dirname+'/style.css');
+});
+
+app.get('/visualization-run.js', function(req, res){
+  res.sendFile(__dirname+'/visualization-run.js');
+});
+
 /* server status */
 io.on('connection', function(socket){
   console.log('a user connected');
