@@ -50,6 +50,10 @@ app.get('/visualization-run.js', function(req, res){
   res.sendFile(__dirname+'/visualization-run.js');
 });
 
+app.get('/logo.png', function(req, res){
+  res.sendFile(__dirname+'/logo.png');
+});
+
 /* server status */
 io.on('connection', function(socket){
   console.log('a user connected');
