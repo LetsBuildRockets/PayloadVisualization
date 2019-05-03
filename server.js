@@ -87,19 +87,29 @@ function playbackMode(file){
       var line_code = line.charCodeAt(0).toString(16);
       //console.log(line_code + " " + msg_type[line_code]);
       //console.log(line_code);
+      line = line.substring(1); // Removes line code.
       switch (line_code) {
         case '3':
-          //console.log("INFO");
-          //console.log(line);
+          // TODO: make a separate line code for actual data that isn't INFO -- this must be done payload side
+          console.log("INFO");
+          line = line.match(/[-]{0,1}[\d]*[\.]{0,1}[\d]+/g);
+          console.log(line);
+          if(line){
+            if (line.length == 3) {
+              rocket_state.temp = line[0];
+              rocket_state.pressure = line[1];
+              rocket_state.alt = line[2];
+            }
+          }
+
           break;
         case '4':
-          console.log("GPS");
-          console.log(line);
+          //console.log("GPS");
+          //console.log(line);
           break;
         case '5':
-
           console.log("IMU");
-          line = line.substring(1).split(" ");
+          line = line.split(" ");
           console.log(line);
           rocket_state.roll = line[2];
           rocket_state.pitch = line[1];
