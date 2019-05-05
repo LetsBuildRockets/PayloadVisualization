@@ -95,9 +95,9 @@ function playbackMode(file){
       switch (line_code) {
         case '3':
           // TODO: make a separate line code for actual data that isn't INFO -- this must be done payload side
-          console.log("INFO");
+          //console.log("INFO");
           line = line.match(/[-]{0,1}[\d]*[\.]{0,1}[\d]+/g);
-          console.log(line);
+          //console.log(line);
           if(line){
             if (line.length == 3) {
               rocket_state.temp = line[0];
